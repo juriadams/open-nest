@@ -1,10 +1,10 @@
 import { openAsBlob } from "node:fs";
+import { stat } from "node:fs/promises";
 import {
   createServer,
   type IncomingMessage,
   type ServerResponse,
 } from "node:http";
-import { stat } from "node:fs/promises";
 import { extname, resolve, sep } from "node:path";
 import { Readable } from "node:stream";
 import type {
@@ -13,6 +13,7 @@ import type {
   Type,
 } from "@nestjs/common";
 import { WebSocketServer } from "ws";
+
 import { createFetcher, FetchAdapter, type Fetcher } from "@/fetch";
 import { gatewayPath, WsGateway, type GatewayClient } from "@/lib/gateway";
 

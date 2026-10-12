@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+
 import { AppController } from "./controller.ts";
 import { EventsGateway } from "./gateway.ts";
 

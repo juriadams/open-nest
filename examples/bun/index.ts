@@ -1,5 +1,7 @@
 import "reflect-metadata";
+
 import { createBunServer } from "@/adapters/bun";
+
 import { AppModule } from "./app/module";
 
 // Create a new Bun Server.

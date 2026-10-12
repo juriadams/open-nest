@@ -1,9 +1,11 @@
 import "reflect-metadata";
+
+import { afterAll, describe, expect, test } from "bun:test";
 import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterAll, describe, expect, test } from "bun:test";
 import { Controller, Get, Module } from "@nestjs/common";
+
 import { createNodeServer, type NodeServer } from "@/adapters/node";
 
 @Controller()

@@ -1,5 +1,7 @@
 import "reflect-metadata";
+
 import { createNodeServer } from "@/adapters/node";
+
 import { AppModule } from "./app/module.ts";
 
 // Create a new Node Server.

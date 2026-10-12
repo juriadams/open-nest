@@ -4,6 +4,7 @@ import type {
   NestApplicationOptions,
   Type,
 } from "@nestjs/common";
+
 import { createFetcher, FetchAdapter, type Fetcher } from "@/fetch";
 import { gatewayPath, WsGateway, type GatewayClient } from "@/lib/gateway";
 

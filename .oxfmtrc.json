@@ -1,5 +1,16 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "printWidth": 80,
-  "ignorePatterns": []
+  "ignorePatterns": [],
+  "sortImports": {
+    "groups": [
+      "side_effect",
+      "builtin",
+      { "newlinesBetween": false },
+      "external",
+      "internal",
+      ["parent", "sibling", "index"]
+    ],
+    "newlinesBetween": true
+  }
 }

@@ -1,6 +1,8 @@
 import "reflect-metadata";
+
 import { afterAll, describe, expect, test } from "bun:test";
 import { Controller, Get, Module } from "@nestjs/common";
+
 import {
   createWorkerFetcher,
   workerContext,

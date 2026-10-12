@@ -1,6 +1,7 @@
 import "reflect-metadata";
-import { Readable } from "node:stream";
+
 import { afterAll, describe, expect, test } from "bun:test";
+import { Readable } from "node:stream";
 import {
   Body,
   Controller,
@@ -16,6 +17,7 @@ import {
   VersioningType,
 } from "@nestjs/common";
 import { Observable } from "rxjs";
+
 import { createFetcher } from "@/fetch";
 
 @Controller()

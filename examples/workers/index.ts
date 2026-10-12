@@ -1,8 +1,10 @@
 import "reflect-metadata";
+
 import {
   createWorkerFetcher,
   type WorkerExecutionContext,
 } from "@/adapters/workers";
+
 import type { Env } from "./app/env";
 import { AppModule } from "./app/module";
 
