@@ -7,7 +7,9 @@ export default defineConfig({
   clean: false,
   tsconfig: "tsconfig.json",
   entry: {
-    fastify: "src/adapters/fastify/index.ts",
-    express: "src/adapters/express/index.ts",
+    fetch: "src/fetch/index.ts",
+    bun: "src/adapters/bun/index.ts",
+    node: "src/adapters/node/index.ts",
+    workers: "src/adapters/workers/index.ts",
   },
 });

@@ -1,8 +1,17 @@
 {
-  "name": "open-nest",
+  "name": "open-nest-workers",
   "main": "index.ts",
   "compatibility_date": "2026-10-12",
   "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "APP_NAME": "open-nest",
+  },
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "00000000000000000000000000000000",
+    },
+  ],
   "observability": {
     "enabled": true,
     "traces": {

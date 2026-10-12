@@ -1,5 +1,8 @@
-# dependencies
+# Dependencies.
 node_modules/
 
-# output
+# Build output.
 dist/
+
+# Tooling output.
+.wrangler/
