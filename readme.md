@@ -14,7 +14,6 @@ Nest, `reflect-metadata`, `rxjs`, and your platform package are peer dependencie
 
 ```ts
 import "reflect-metadata";
-import { Controller, Get, Module } from "@nestjs/common";
 import { createFetcher } from "open-nest/fastify";
 import { AppModule } from "@/app.module";
 
@@ -27,6 +26,8 @@ await Bun.serve({
 ```
 
 Express follows the same pattern, imported from `open-nest/express`.
+
+Runnable copies live in `examples/bun` and `examples/worker`.
 
 The Nest app boots on the first request and its instance is cached for all further requests.
 
