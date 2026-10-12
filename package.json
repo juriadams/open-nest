@@ -1,7 +1,7 @@
 {
   "name": "open-nest",
   "version": "0.0.2",
-  "description": "Makes Nest applications compatible with Web Standard Request/Response handlers (Bun, Cloudflare, ...).",
+  "description": "Run any Nest application as a Web-Standard Request/Response handler. First class support for Bun, Node, and Cloudflare Workers.",
   "files": [
     "package.json",
     "readme.md",
