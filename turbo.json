@@ -21,7 +21,7 @@
       "persistent": true,
       "dependsOn": ["^build"]
     },
-    "bench": {
+    "benchmark": {
       "cache": false,
       "dependsOn": ["^build"]
     },

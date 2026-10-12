@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "typecheck": "bun check",
-    "start": "bun index.ts"
+    "benchmark": "bun index.ts"
   },
   "dependencies": {
     "@nestjs/common": "12.1.3",

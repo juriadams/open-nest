@@ -20,7 +20,7 @@
     "examples:node": "turbo run start --filter=@open-nest/example-node",
     "examples:node-websockets": "turbo run start --filter=@open-nest/example-node-websockets",
     "examples:workers": "turbo run start --filter=@open-nest/example-workers",
-    "benchmarks:http": "turbo run bench --filter=@open-nest/bench-http"
+    "benchmarks:http": "turbo run benchmark --filter=@open-nest/bench-http"
   },
   "devDependencies": {
     "@arethetypeswrong/core": "0.18.5",
