@@ -1,7 +1,6 @@
 {
   "name": "open-nest",
   "version": "0.0.1",
-  "private": true,
   "description": "Makes Nest applications compatible with Web Standard Request/Response handlers (Bun, Cloudflare, ...).",
   "files": [
     "package.json",
