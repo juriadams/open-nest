@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { createNodeServer, NodeWsAdapter } from "open-nest/node";
+import { createNodeServer, NodeWsAdapter } from "@/adapters/node";
 import { AppModule } from "./app/module.ts";
 
 // Create a new Node Server.

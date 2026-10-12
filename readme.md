@@ -1,10 +1,10 @@
 # `open-nest`
 
-Runs a Nest application as a Web `Request` to `Response` function, on Bun, Node, and Cloudflare Workers.
+Run any Nest application as a Standard `Request` and `Response` handler, on **Bun**, **Node**, and **Cloudflare Workers**.
 
 ## Installation
 
-Peer dependencies are `@nestjs/common`, `@nestjs/core`, `reflect-metadata`, and `rxjs`. WebSocket gateways also need `@nestjs/websockets`.
+Peer dependencies are `@nestjs/common`, `@nestjs/core`, `reflect-metadata`, and `rxjs`. WebSocket gateways also need `@nestjs/websockets`. These should already ship with your Nest installation.
 
 ```bash
 bun add open-nest
@@ -13,23 +13,23 @@ bun add open-nest
 ## Examples
 
 - [`examples/workers`](/examples/workers)<br />
-  <sup>[readme](/examples/workers/readme.md) ⋅ [examples](/examples/workers/readme.md#examples)</sup><br />
+  <sup>[readme](/examples/workers/readme.md) ⋅ [code](/examples/workers/)</sup><br />
   Run a Nest application on Cloudflare Workers.
 
 - [`examples/bun`](/examples/bun)<br />
-  <sup>[readme](/examples/bun/readme.md) ⋅ [examples](/examples/bun/readme.md#examples)</sup><br />
+  <sup>[readme](/examples/bun/readme.md) ⋅ [code](/examples/bun/)</sup><br />
   Run a Nest application via `Bun.serve`.
 
 - [`examples/bun-websockets`](/examples/bun-websockets)<br />
-  <sup>[readme](/examples/bun-websockets/readme.md) ⋅ [examples](/examples/bun-websockets/readme.md#examples)</sup><br />
+  <sup>[readme](/examples/bun-websockets/readme.md) ⋅ [code](/examples/bun-websockets/)</sup><br />
   Run a Nest application via `Bun.serve` with WebSockets.
 
 - [`examples/node`](/examples/node)<br />
-  <sup>[readme](/examples/node/readme.md) ⋅ [examples](/examples/node/readme.md#examples)</sup><br />
+  <sup>[readme](/examples/node/readme.md) ⋅ [code](/examples/node/)</sup><br />
   Run a Nest application via `http.Server`.
 
 - [`examples/node-websockets`](/examples/node-websockets)<br />
-  <sup>[readme](/examples/node-websockets/readme.md) ⋅ [examples](/examples/node-websockets/readme.md#examples)</sup><br />
+  <sup>[readme](/examples/node-websockets/readme.md) ⋅ [code](/examples/node-websockets/)</sup><br />
   Run a Nest application via `http.Server` with WebSockets.
 
 ## Usage
@@ -40,7 +40,7 @@ bun add open-nest
 import "reflect-metadata";
 
 import { createFetcher } from "open-nest";
-import { AppModule } from "@/app.module";
+import { AppModule } from "@/app/module";
 
 const fetcher = createFetcher({ module: AppModule });
 
