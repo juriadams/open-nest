@@ -5,7 +5,8 @@
   "scripts": {
     "typecheck": "bun check",
     "build": "tsdown --clean",
-    "start": "bunx wrangler dev --config wrangler.jsonc --tsconfig tsconfig.json"
+    "start": "bunx wrangler dev --config wrangler.jsonc --tsconfig tsconfig.json",
+    "dev": "bunx wrangler dev --config wrangler.jsonc --tsconfig tsconfig.json"
   },
   "dependencies": {
     "@nestjs/common": "12.1.3",

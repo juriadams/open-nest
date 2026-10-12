@@ -1,7 +1,7 @@
 # Node
 
-HTTP server on port 3000. `GET /` returns `{ data: null, error: null }`.
+Nest on `http.Server`. `GET /` returns `{ data: null, error: null }`.
 
 ```bash
-bun run start
+bun run dev
 ```

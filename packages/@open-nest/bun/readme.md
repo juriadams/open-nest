@@ -1,13 +1,12 @@
 # `@open-nest/bun`
 
-Run an [`open-nest`](https://github.com/juriadams/open-nest) application with `Bun.serve`.
+Serve an [`open-nest`](https://github.com/juriadams/open-nest) handler with `Bun.serve`.
 
-```bash
-bun add open-nest @open-nest/bun
+```sh
+bun add @open-nest/bun
 ```
 
-```ts
-import { BunWsAdapter, createBunServer } from "@open-nest/bun";
-```
+`createBunServer` starts the server. `BunWsAdapter` upgrades WebSocket gateways. Static files use `Bun.file()`.
 
-Examples live in [`examples/bun`](../../../examples/bun) and [`examples/bun-websockets`](../../../examples/bun-websockets).
+- [HTTP](../../../examples/bun)
+- [WebSockets](../../../examples/bun-websockets)

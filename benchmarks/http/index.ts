@@ -15,6 +15,7 @@ const PORTS = {
   NODE: await port(),
 };
 
+// Spawn a Bun server in a child process.
 const bun = Bun.spawn(["bun", `${import.meta.dir}/servers/bun.ts`], {
   cwd: import.meta.dir,
   stdout: "ignore",
@@ -25,6 +26,7 @@ const bun = Bun.spawn(["bun", `${import.meta.dir}/servers/bun.ts`], {
   },
 });
 
+// Spawn a Node server in a child process.
 const node = Bun.spawn(
   [
     "node",
@@ -45,6 +47,7 @@ const node = Bun.spawn(
 );
 
 try {
+  // Wait for the servers to start.
   await Bun.sleep(500);
 
   // Warm up the Bun server.

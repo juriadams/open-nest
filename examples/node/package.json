@@ -5,7 +5,8 @@
   "scripts": {
     "typecheck": "bun check",
     "build": "tsdown --clean",
-    "start": "node --no-strip-types --import tsx src/index.ts"
+    "start": "node --no-strip-types --import tsx src/index.ts",
+    "dev": "node --watch --watch-path=src --no-strip-types --import tsx src/index.ts"
   },
   "dependencies": {
     "@nestjs/common": "12.1.3",

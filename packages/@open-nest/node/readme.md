@@ -1,13 +1,12 @@
 # `@open-nest/node`
 
-Run an [`open-nest`](https://github.com/juriadams/open-nest) application with `node:http`.
+Serve an [`open-nest`](https://github.com/juriadams/open-nest) handler with `node:http`.
 
-```bash
-bun add open-nest @open-nest/node
+```sh
+bun add @open-nest/node
 ```
 
-```ts
-import { createNodeServer, NodeWsAdapter } from "@open-nest/node";
-```
+`createNodeServer` starts an `http.Server`. `NodeWsAdapter` upgrades WebSocket gateways through `ws`. Static files use `node:fs`.
 
-Examples live in [`examples/node`](../../../examples/node) and [`examples/node-websockets`](../../../examples/node-websockets).
+- [HTTP](../../../examples/node)
+- [WebSockets](../../../examples/node-websockets)

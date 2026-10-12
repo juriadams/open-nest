@@ -5,7 +5,7 @@ export class AppController {
   @Get("/health")
   health() {
     return {
-      data: null,
+      data: "hey",
       error: null,
     };
   }

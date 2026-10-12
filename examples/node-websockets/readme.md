@@ -1,7 +1,7 @@
 # Node WebSockets
 
-Gateway at `/ws` echoing `events`. A client sends `{ "event": "events", "data": "hello" }` every second.
+A gateway at `/ws` echoes `events`. Upgrades go through `ws`.
 
 ```bash
-bun run start
+bun run dev
 ```

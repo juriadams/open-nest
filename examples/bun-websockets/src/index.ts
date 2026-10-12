@@ -7,7 +7,7 @@ import { AppModule } from "@/app/module";
 // Create a new Bun Server.
 const server = await createBunServer({
   module: AppModule,
-  port: 3000,
+  port: 4002,
   configure: (app) => {
     app.useWebSocketAdapter(new BunWsAdapter());
   },
@@ -36,6 +36,15 @@ const timer = setInterval(() => {
 
   console.log(`sent: \`${payload}\``);
 }, 1000);
+
+if (import.meta.hot) {
+  import.meta.hot.accept();
+  import.meta.hot.dispose(async () => {
+    clearInterval(timer);
+    client.close();
+    await server.close();
+  });
+}
 
 // Safely shut down WebSocket Client, Nest instance and Server.
 process.on("SIGINT", async () => {

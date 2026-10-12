@@ -7,7 +7,7 @@ import { AppModule } from "@/app/module";
 // Create a new Node Server.
 const server = await createNodeServer({
   module: AppModule,
-  port: 3000,
+  port: 4004,
   configure: (app) => {
     app.useWebSocketAdapter(new NodeWsAdapter());
   },
@@ -34,11 +34,14 @@ const timer = setInterval(() => {
 }, 1000);
 
 // Safely shut down the WebSocket client, Nest instance and Server.
-process.on("SIGINT", async () => {
+const shutdown = async () => {
   clearInterval(timer);
   ws.close();
 
   await server.close();
 
   process.exit(0);
-});
+};
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);

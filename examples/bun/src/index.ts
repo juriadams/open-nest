@@ -7,10 +7,17 @@ import { AppModule } from "@/app/module";
 // Create a new Bun Server.
 const server = await createBunServer({
   module: AppModule,
-  port: Number(process.env.PORT ?? 3000),
+  port: 4001,
 });
 
 console.log(`listening on http://localhost:${server.port}`);
+
+if (import.meta.hot) {
+  import.meta.hot.accept();
+  import.meta.hot.dispose(async () => {
+    await server.close();
+  });
+}
 
 // Safely shut down Nest instance and Server.
 process.on("SIGINT", async () => {

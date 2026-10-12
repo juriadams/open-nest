@@ -14,7 +14,7 @@
     "test": "turbo run test",
     "lint": "oxlint --type-aware && oxfmt --check",
     "format": "oxlint --fix --fix-suggestions && oxfmt",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --ui tui",
     "examples:bun": "turbo run start --filter=@open-nest/example-bun",
     "examples:bun-websockets": "turbo run start --filter=@open-nest/example-bun-websockets",
     "examples:node": "turbo run start --filter=@open-nest/example-node",

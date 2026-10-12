@@ -1,7 +1,7 @@
 # Bun
 
-HTTP server on port 3000. `GET /health` returns `{ data: null, error: null }`.
+Nest on `Bun.serve`. `GET /health` returns `{ data: null, error: null }`.
 
 ```bash
-bun run start
+bun run dev
 ```

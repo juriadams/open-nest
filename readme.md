@@ -7,40 +7,62 @@
 [![npm version](https://img.shields.io/npm/v/open-nest)](https://www.npmjs.com/package/open-nest)
 [![bundle size](https://img.shields.io/bundlejs/size/open-nest)](https://bundlejs.com/?q=open-nest)
 
-Run any Nest application as a Web-Standard `Request`/`Response` handler. First class support for **Bun**, **Node**, and **Cloudflare Workers**.
+---
+
+**open-nest** (`open-nest`) runs a Nest application as a Web-standard `Request`/`Response` handler.
+
+The same Nest module serves HTTP on Bun, Node, and Cloudflare Workers. Each runtime is its own package. The handler is created once and reused for every request.
+
+### Features:
+
+- **One handler**  
+  `createFetcher` turns a Nest module into `(request) => Response`.
+
+- **Bun, Node, and Workers**  
+  `@open-nest/bun` uses `Bun.serve`. `@open-nest/node` uses `node:http`. `@open-nest/workers` creates a Worker `fetch` handler.
+
+- **WebSockets**  
+  `BunWsAdapter` lets `Bun.serve` upgrade the connection. `NodeWsAdapter` upgrades through [`ws`](https://github.com/websockets/ws).
+
+- **Static files**  
+  `BunAdapter` reads files with `Bun.file()`. `NodeAdapter` reads them with `node:fs`.
+
+- **Worker bindings**  
+  `workerContext()` returns `env` and `ctx` for the request in flight, including `ctx.waitUntil`.
+
+## Contents
+
+- [Installation](#installation)  
+  Add `open-nest` and a runtime package.
+
+- [Usage](#usage)  
+  Create a handler and serve it.
+
+- [Examples](#examples)  
+  Small apps for each runtime.
+
+  - [Bun](#bun)
+  - [Node](#node)
+  - [Workers](#workers)
+
+- [Packages](#packages)  
+  What each package is for.
 
 ## Installation
 
-```bash
+Peer dependencies are `@nestjs/common`, `@nestjs/core`, `reflect-metadata`, and `rxjs`. WebSocket gateways also need `@nestjs/websockets`. These already ship with a Nest installation.
+
+```sh
 bun add open-nest
+```
+
+Add the runtime you serve with:
+
+```sh
 bun add @open-nest/bun
 bun add @open-nest/node
 bun add @open-nest/workers
 ```
-
-`open-nest` is the HTTP handler. `@open-nest/bun`, `@open-nest/node`, and `@open-nest/workers` are the runtime packages. Peer dependencies are `@nestjs/common`, `@nestjs/core`, `reflect-metadata`, and `rxjs`. WebSocket gateways also need `@nestjs/websockets`. These should already ship with your Nest installation.
-
-## Examples
-
-- [`examples/workers`](/examples/workers)<br />
-  <sup>[readme](/examples/workers/readme.md) ⋅ [code](/examples/workers/)</sup><br />
-  Run a Nest application on Cloudflare Workers.
-
-- [`examples/bun`](/examples/bun)<br />
-  <sup>[readme](/examples/bun/readme.md) ⋅ [code](/examples/bun/)</sup><br />
-  Run a Nest application via `Bun.serve`.
-
-- [`examples/bun-websockets`](/examples/bun-websockets)<br />
-  <sup>[readme](/examples/bun-websockets/readme.md) ⋅ [code](/examples/bun-websockets/)</sup><br />
-  Run a Nest application via `Bun.serve` with WebSockets.
-
-- [`examples/node`](/examples/node)<br />
-  <sup>[readme](/examples/node/readme.md) ⋅ [code](/examples/node/)</sup><br />
-  Run a Nest application via `http.Server`.
-
-- [`examples/node-websockets`](/examples/node-websockets)<br />
-  <sup>[readme](/examples/node-websockets/readme.md) ⋅ [code](/examples/node-websockets/)</sup><br />
-  Run a Nest application via `http.Server` with WebSockets.
 
 ## Usage
 
@@ -51,24 +73,37 @@ import { createFetcher } from "open-nest";
 
 import { AppModule } from "@/app/module";
 
+// 1. Create a handler from a Nest module.
 const fetcher = createFetcher({ module: AppModule });
 
+// 2. Serve it anywhere that speaks Request and Response.
 await Bun.serve({
   fetch: fetcher,
   port: 3000,
 });
 ```
 
-`createFetcher` from `open-nest` is the HTTP entry. It returns a function from `Request` to `Response`. WebSocket gateways and static files are available for the respective runtime under `@open-nest/bun` and `@open-nest/node`.
+`createFetcher` initializes the Nest application once and returns a function from `Request` to `Response`.
+
+`configure` runs after the app is created and before `init`. `opts` is forwarded to `NestFactory.create`. `app()` resolves the Nest application.
+
+```ts
+const fetcher = createFetcher({
+  module: AppModule,
+  configure: (app) => {
+    app.enableCors();
+    app.setGlobalPrefix("api");
+  },
+  opts: { logger: ["error", "warn"] },
+});
+
+const app = await fetcher.app();
+```
 
 ### Bun
 
 ```ts
-import "reflect-metadata";
-
 import { BunWsAdapter, createBunServer } from "@open-nest/bun";
-
-import { AppModule } from "@/app/module";
 
 await createBunServer({
   module: AppModule,
@@ -80,20 +115,12 @@ await createBunServer({
 });
 ```
 
-`createBunServer` from `@open-nest/bun` serves that handler with `Bun.serve`. It upgrades gateway paths and serves files with `Bun.file()`.
-
-- `createBunServer` initializes the Nest application once and starts and returns a `Bun.serve` instance.
-- `BunWsAdapter` is the Nest WebSocket adapter. `Bun.serve` performs the upgrade.
-- `BunAdapter` extends `FetchAdapter` and implements `useStaticAssets` with `Bun.file()`.
+`createBunServer` starts `Bun.serve` and returns it. `BunWsAdapter` records gateway paths so `Bun.serve` can upgrade them. Static files are served with `Bun.file()`.
 
 ### Node
 
 ```ts
-import "reflect-metadata";
-
 import { createNodeServer, NodeWsAdapter } from "@open-nest/node";
-
-import { AppModule } from "@/app/module";
 
 await createNodeServer({
   module: AppModule,
@@ -105,19 +132,11 @@ await createNodeServer({
 });
 ```
 
-`createNodeServer` from `@open-nest/node` initializes the Nest application and starts and returns a `http.Server` instance. HTTP uses `node:http`, `node:stream`, and `node:fs` (`openAsBlob`).
-
-Gateway upgrades go through [`ws`](https://github.com/websockets/ws). The WebSocket client is the global `WebSocket` from Node 22 onward.
-
-- `createNodeServer` initializes the Nest application once and starts and returns a `http.Server` instance.
-- `NodeWsAdapter` is the Nest WebSocket adapter. Upgrades go through `ws`.
-- `NodeAdapter` extends `FetchAdapter` and implements `useStaticAssets` with `node:fs`.
+`createNodeServer` starts an `http.Server` and returns it. Gateway upgrades go through `ws`. The WebSocket client is the global `WebSocket` from Node 22 onward. Static files are served with `node:fs`.
 
 ### Workers
 
 ```ts
-import "reflect-metadata";
-
 import {
   createWorkerFetcher,
   workerContext,
@@ -128,6 +147,13 @@ interface Env {
   APP_NAME: string;
   CACHE: KVNamespace;
 }
+
+const fetcher = createWorkerFetcher<Env>({ module: AppModule });
+
+export default {
+  fetch: (request: Request, env: Env, ctx: WorkerExecutionContext) =>
+    fetcher(request, env, ctx),
+};
 
 @Controller()
 class AppController {
@@ -141,55 +167,48 @@ class AppController {
     return { data: { app: env.APP_NAME, lastOpenedAt }, error: null };
   }
 }
-
-@Module({ controllers: [AppController] })
-class AppModule {}
-
-const fetcher = createWorkerFetcher<Env>({ module: AppModule });
-
-export default {
-  fetch: (request: Request, env: Env, ctx: WorkerExecutionContext) =>
-    fetcher(request, env, ctx),
-};
 ```
 
-`createWorkerFetcher` from `@open-nest/workers` initializes the Nest application and returns a handler of `(request, env, ctx)`.
+`createWorkerFetcher` returns a handler of `(request, env, ctx)`. `workerContext()` reads those bindings for the request in flight. The Worker needs the `nodejs_compat` compatibility flag.
 
-Pass bindings and the execution context through, then read them with `workerContext()` from a controller or provider. The Worker needs the `nodejs_compat` compatibility flag.
+## Examples
 
-- `createWorkerFetcher` initializes the Nest application once and returns a handler of `(request, env, ctx)`.
-- `workerContext()` reads the bindings and the raw execution context for the request in flight.
-- `WorkerExecutionContext` is the `ctx` argument: `waitUntil`, `passThroughOnException`, and `props`.
+- [`examples/bun`](/examples/bun)  
+  <sup>[readme](/examples/bun/readme.md) ⋅ [code](/examples/bun/)</sup>  
+  Nest on `Bun.serve`. `GET /health` returns `{ data: null, error: null }`.
 
-### App Configuration
+- [`examples/bun-websockets`](/examples/bun-websockets)  
+  <sup>[readme](/examples/bun-websockets/readme.md) ⋅ [code](/examples/bun-websockets/)</sup>  
+  A gateway at `/ws` that echoes `events`.
 
-```ts
-const fetcher = createFetcher({
-  module: AppModule,
-  configure: (app) => {
-    app.enableCors();
-    app.setGlobalPrefix("api");
-  },
-});
-```
+- [`examples/node`](/examples/node)  
+  <sup>[readme](/examples/node/readme.md) ⋅ [code](/examples/node/)</sup>  
+  Nest on `http.Server`. `GET /` returns `{ data: null, error: null }`.
 
-`configure` runs after the app is created and before `init`. Use it for pipes, a global prefix, CORS, and the other app methods.
+- [`examples/node-websockets`](/examples/node-websockets)  
+  <sup>[readme](/examples/node-websockets/readme.md) ⋅ [code](/examples/node-websockets/)</sup>  
+  The same gateway, upgraded through `ws`.
 
-### App Instance
+- [`examples/workers`](/examples/workers)  
+  <sup>[readme](/examples/workers/readme.md) ⋅ [code](/examples/workers/)</sup>  
+  A Worker with an `APP_NAME` variable and a `CACHE` KV binding.
 
-```ts
-const app = await fetcher.app();
-```
+From the repository root, `bun run dev` watches the packages and starts every example. Bun listens on port 4001, Bun websockets on 4002, Node on 4003, Node websockets on 4004, and Workers on 8787.
 
-`app()` resolves the underlying Nest application.
+## Packages
 
-#### Nest Options
+- [`open-nest`](/packages/open-nest)  
+  <sup>[readme](/packages/open-nest/readme.md)</sup>  
+  The HTTP handler: `createFetcher`, `FetchAdapter`, and multipart interceptors.
 
-```ts
-const fetcher = createFetcher({
-  module: AppModule,
-  opts: { logger: ["error", "warn"] },
-});
-```
+- [`@open-nest/bun`](/packages/@open-nest/bun)  
+  <sup>[readme](/packages/@open-nest/bun/readme.md) ⋅ [examples](/examples/bun)</sup>  
+  `Bun.serve`, WebSocket upgrades, and static files.
 
-`opts` is forwarded to `NestFactory.create` as `NestApplicationOptions`. When omitted, Nest keeps its own defaults.
+- [`@open-nest/node`](/packages/@open-nest/node)  
+  <sup>[readme](/packages/@open-nest/node/readme.md) ⋅ [examples](/examples/node)</sup>  
+  `node:http`, WebSocket upgrades through `ws`, and static files.
+
+- [`@open-nest/workers`](/packages/@open-nest/workers)  
+  <sup>[readme](/packages/@open-nest/workers/readme.md) ⋅ [examples](/examples/workers)</sup>  
+  Worker `fetch`, plus `env` and `ctx` for the request in flight.

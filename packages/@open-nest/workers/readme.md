@@ -1,13 +1,11 @@
 # `@open-nest/workers`
 
-Run an [`open-nest`](https://github.com/juriadams/open-nest) application on Cloudflare Workers.
+Serve an [`open-nest`](https://github.com/juriadams/open-nest) handler on Cloudflare Workers.
 
-```bash
-bun add open-nest @open-nest/workers
+```sh
+bun add @open-nest/workers
 ```
 
-```ts
-import { createWorkerFetcher, workerContext } from "@open-nest/workers";
-```
+`createWorkerFetcher` returns `(request, env, ctx)`. `workerContext()` reads those bindings for the request in flight. The Worker needs `nodejs_compat`.
 
-The example lives in [`examples/workers`](../../../examples/workers).
+- [KV bindings](../../../examples/workers)
