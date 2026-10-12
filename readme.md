@@ -45,6 +45,7 @@ Peer dependencies are `@nestjs/common`, `@nestjs/core`, `reflect-metadata`, and 
 import "reflect-metadata";
 
 import { createFetcher } from "open-nest";
+
 import { AppModule } from "@/app/module";
 
 const fetcher = createFetcher({ module: AppModule });
@@ -63,6 +64,7 @@ await Bun.serve({
 import "reflect-metadata";
 
 import { BunWsAdapter, createBunServer } from "open-nest/bun";
+
 import { AppModule } from "@/app/module";
 
 await createBunServer({
@@ -87,6 +89,7 @@ await createBunServer({
 import "reflect-metadata";
 
 import { createNodeServer, NodeWsAdapter } from "open-nest/node";
+
 import { AppModule } from "@/app/module";
 
 await createNodeServer({
