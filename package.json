@@ -1,71 +1,34 @@
 {
-  "name": "open-nest",
-  "version": "0.0.2",
-  "description": "Run any Nest application as a Web-Standard Request/Response handler. First class support for Bun, Node, and Cloudflare Workers.",
-  "files": [
-    "package.json",
-    "readme.md",
-    "dist"
+  "name": "open-nest-root",
+  "private": true,
+  "workspaces": [
+    "packages/open-nest",
+    "packages/@open-nest/*",
+    "examples/*",
+    "benchmarks/*"
   ],
   "type": "module",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "types": "./dist/fetch.d.mts",
-      "import": "./dist/fetch.mjs"
-    },
-    "./bun": {
-      "types": "./dist/bun.d.mts",
-      "import": "./dist/bun.mjs"
-    },
-    "./node": {
-      "types": "./dist/node.d.mts",
-      "import": "./dist/node.mjs"
-    },
-    "./workers": {
-      "types": "./dist/workers.d.mts",
-      "import": "./dist/workers.mjs"
-    },
-    "./package.json": "./package.json"
-  },
   "scripts": {
-    "dev": "tsdown --watch",
-    "build": "tsdown --clean",
-    "typecheck": "bun check",
-    "test": "bun test",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
     "lint": "oxlint --type-aware && oxfmt --check",
     "format": "oxlint --fix --fix-suggestions && oxfmt",
-    "example:bun": "bun examples/bun/index.ts",
-    "example:bun-websockets": "bun examples/bun-websockets/index.ts",
-    "example:node": "node --no-strip-types --import tsx examples/node/index.ts",
-    "example:node-websockets": "node --no-strip-types --import tsx examples/node-websockets/index.ts",
-    "example:workers": "bunx wrangler dev --config examples/workers/wrangler.jsonc --tsconfig ../../tsconfig.json"
-  },
-  "dependencies": {
-    "ws": "8.22.0"
+    "dev": "turbo run dev",
+    "examples:bun": "turbo run start --filter=@open-nest/example-bun",
+    "examples:bun-websockets": "turbo run start --filter=@open-nest/example-bun-websockets",
+    "examples:node": "turbo run start --filter=@open-nest/example-node",
+    "examples:node-websockets": "turbo run start --filter=@open-nest/example-node-websockets",
+    "examples:workers": "turbo run start --filter=@open-nest/example-workers",
+    "benchmarks:http": "turbo run bench --filter=@open-nest/bench-http"
   },
   "devDependencies": {
     "@arethetypeswrong/core": "0.18.5",
-    "@nats-io/transport-node": "3.4.0",
     "@nestjs/common": "12.1.3",
     "@nestjs/core": "12.1.3",
-    "@nestjs/microservices": "12.1.3",
-    "@nestjs/platform-express": "12.1.3",
-    "@nestjs/platform-socket.io": "12.1.3",
     "@nestjs/websockets": "12.1.3",
     "@types/bun": "latest",
-    "@types/express": "5.0.6",
     "@types/node": "26.6.5",
-    "@types/ws": "8.18.2",
-    "amqp-connection-manager": "5.0.0",
-    "amqplib": "2.2.0",
-    "class-transformer": "0.5.1",
-    "class-validator": "0.15.1",
-    "express": "5.3.0",
-    "helmet": "8.3.0",
-    "ioredis": "6.0.0",
-    "kafkajs": "2.2.4",
-    "mqtt": "5.16.0",
     "oxfmt": "0.72.0",
     "oxlint": "1.87.0",
     "oxlint-tsgolint": "7.0.2003",
@@ -73,20 +36,8 @@
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",
     "tsdown": "0.23.0",
-    "tsup": "8.5.1",
-    "tsx": "4.23.15",
+    "turbo": "2.11.7",
     "typescript": "7.0.2"
   },
-  "peerDependencies": {
-    "@nestjs/common": "^12.0.0",
-    "@nestjs/core": "^12.0.0",
-    "@nestjs/websockets": "^12.0.0",
-    "reflect-metadata": "^0.1.12 || ^0.2.0",
-    "rxjs": "^7.1.0"
-  },
-  "peerDependenciesMeta": {
-    "@nestjs/websockets": {
-      "optional": true
-    }
-  }
+  "packageManager": "bun@1.4.3"
 }

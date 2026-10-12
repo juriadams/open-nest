@@ -13,9 +13,12 @@ Run any Nest application as a Web-Standard `Request`/`Response` handler. First c
 
 ```bash
 bun add open-nest
+bun add @open-nest/bun
+bun add @open-nest/node
+bun add @open-nest/workers
 ```
 
-Peer dependencies are `@nestjs/common`, `@nestjs/core`, `reflect-metadata`, and `rxjs`. WebSocket gateways also need `@nestjs/websockets`. These should already ship with your Nest installation.
+`open-nest` is the HTTP handler. `@open-nest/bun`, `@open-nest/node`, and `@open-nest/workers` are the runtime packages. Peer dependencies are `@nestjs/common`, `@nestjs/core`, `reflect-metadata`, and `rxjs`. WebSocket gateways also need `@nestjs/websockets`. These should already ship with your Nest installation.
 
 ## Examples
 
@@ -56,14 +59,14 @@ await Bun.serve({
 });
 ```
 
-`createFetcher` from `open-nest` is the HTTP entry. It returns a function from `Request` to `Response`. WebSocket gateways and static files are available for the respective runtime under `open-nest/bun` and `open-nest/node`.
+`createFetcher` from `open-nest` is the HTTP entry. It returns a function from `Request` to `Response`. WebSocket gateways and static files are available for the respective runtime under `@open-nest/bun` and `@open-nest/node`.
 
 ### Bun
 
 ```ts
 import "reflect-metadata";
 
-import { BunWsAdapter, createBunServer } from "open-nest/bun";
+import { BunWsAdapter, createBunServer } from "@open-nest/bun";
 
 import { AppModule } from "@/app/module";
 
@@ -77,7 +80,7 @@ await createBunServer({
 });
 ```
 
-`createBunServer` from `open-nest/bun` serves that handler with `Bun.serve`. It upgrades gateway paths and serves files with `Bun.file()`.
+`createBunServer` from `@open-nest/bun` serves that handler with `Bun.serve`. It upgrades gateway paths and serves files with `Bun.file()`.
 
 - `createBunServer` initializes the Nest application once and starts and returns a `Bun.serve` instance.
 - `BunWsAdapter` is the Nest WebSocket adapter. `Bun.serve` performs the upgrade.
@@ -88,7 +91,7 @@ await createBunServer({
 ```ts
 import "reflect-metadata";
 
-import { createNodeServer, NodeWsAdapter } from "open-nest/node";
+import { createNodeServer, NodeWsAdapter } from "@open-nest/node";
 
 import { AppModule } from "@/app/module";
 
@@ -102,7 +105,7 @@ await createNodeServer({
 });
 ```
 
-`createNodeServer` from `open-nest/node` initializes the Nest application and starts and returns a `http.Server` instance. HTTP uses `node:http`, `node:stream`, and `node:fs` (`openAsBlob`).
+`createNodeServer` from `@open-nest/node` initializes the Nest application and starts and returns a `http.Server` instance. HTTP uses `node:http`, `node:stream`, and `node:fs` (`openAsBlob`).
 
 Gateway upgrades go through [`ws`](https://github.com/websockets/ws). The WebSocket client is the global `WebSocket` from Node 22 onward.
 
@@ -119,7 +122,7 @@ import {
   createWorkerFetcher,
   workerContext,
   type WorkerExecutionContext,
-} from "open-nest/workers";
+} from "@open-nest/workers";
 
 interface Env {
   APP_NAME: string;
@@ -150,7 +153,7 @@ export default {
 };
 ```
 
-`createWorkerFetcher` from `open-nest/workers` initializes the Nest application and returns a handler of `(request, env, ctx)`.
+`createWorkerFetcher` from `@open-nest/workers` initializes the Nest application and returns a handler of `(request, env, ctx)`.
 
 Pass bindings and the execution context through, then read them with `workerContext()` from a controller or provider. The Worker needs the `nodejs_compat` compatibility flag.
 
